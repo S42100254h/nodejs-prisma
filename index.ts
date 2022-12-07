@@ -74,6 +74,11 @@ app.delete("/users/:id", async (req: Request, res: Response) => {
   }
 });
 
+app.get("/posts", async (req: Request, res: Response) => {
+  const posts = await prisma.post.findMany();
+  return res.json(posts);
+});
+
 app.post("/posts", async (req: Request, res: Response) => {
   const { title, content, authorId } = req.body;
   try {
