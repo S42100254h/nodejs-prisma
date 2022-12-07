@@ -79,6 +79,20 @@ app.get("/posts", async (req: Request, res: Response) => {
   return res.json(posts);
 });
 
+app.get("/posts/:id", async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  try {
+    const post = await prisma.post.findUnique({
+      where: {
+        id,
+      },
+    });
+    return res.json(post);
+  } catch (e) {
+    return res.status(400).json(e);
+  }
+});
+
 app.post("/posts", async (req: Request, res: Response) => {
   const { title, content, authorId } = req.body;
   try {
