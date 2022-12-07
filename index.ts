@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import express, { Request, Response } from "express";
 
 const app = express();
@@ -42,7 +42,7 @@ app.post("/users", async (req: Request, res: Response) => {
   }
 });
 
-app.put("/users/:id", async (req: Request, res: Response) => {
+app.patch("/users/:id", async (req: Request, res: Response) => {
   const id = Number(req.params.id);
   const { name } = req.body;
   try {
@@ -69,6 +69,74 @@ app.delete("/users/:id", async (req: Request, res: Response) => {
       },
     });
     return res.json(user);
+  } catch (e) {
+    return res.status(400).json(e);
+  }
+});
+
+app.get("/posts", async (req: Request, res: Response) => {
+  const posts = await prisma.post.findMany();
+  return res.json(posts);
+});
+
+app.get("/posts/:id", async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  try {
+    const post = await prisma.post.findUnique({
+      where: {
+        id,
+      },
+    });
+    return res.json(post);
+  } catch (e) {
+    return res.status(400).json(e);
+  }
+});
+
+app.post("/posts", async (req: Request, res: Response) => {
+  const { title, content, authorId } = req.body;
+  try {
+    const post = await prisma.post.create({
+      data: {
+        title,
+        content,
+        authorId,
+      },
+    });
+    return res.json(post);
+  } catch (e) {
+    return res.status(400).json(e);
+  }
+});
+
+app.patch("/posts/:id", async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  const { title, content } = req.body;
+  try {
+    const post = await prisma.post.update({
+      where: {
+        id,
+      },
+      data: {
+        title,
+        content,
+      },
+    });
+    return res.json(post);
+  } catch (e) {
+    return res.status(400).json(e);
+  }
+});
+
+app.delete("/posts/:id", async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  try {
+    const post = await prisma.post.delete({
+      where: {
+        id,
+      },
+    });
+    return res.json(post);
   } catch (e) {
     return res.status(400).json(e);
   }
