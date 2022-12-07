@@ -109,4 +109,23 @@ app.post("/posts", async (req: Request, res: Response) => {
   }
 });
 
+app.patch("/posts/:id", async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  const { title, content } = req.body;
+  try {
+    const post = await prisma.post.update({
+      where: {
+        id,
+      },
+      data: {
+        title,
+        content,
+      },
+    });
+    return res.json(post);
+  } catch (e) {
+    return res.status(400).json(e);
+  }
+});
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
