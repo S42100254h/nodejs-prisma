@@ -6,11 +6,25 @@ const port = 3000;
 
 app.use(express.json());
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({ rejectOnNotFound: true });
 
 app.get("/users", async (req: Request, res: Response) => {
   const users = await prisma.user.findMany();
   return res.json(users);
+});
+
+app.get("/users/:id", async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+    return res.json(user);
+  } catch (e) {
+    return res.status(400).json(e);
+  }
 });
 
 app.post("/users", async (req: Request, res: Response) => {
