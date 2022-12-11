@@ -4,6 +4,8 @@ import express, { Request, Response } from "express";
 const app = express();
 const port = 3000;
 
+const posts = require("./router/posts");
+
 app.use(express.json());
 
 const prisma = new PrismaClient({ rejectOnNotFound: true });
@@ -74,72 +76,6 @@ app.delete("/users/:id", async (req: Request, res: Response) => {
   }
 });
 
-app.get("/posts", async (req: Request, res: Response) => {
-  const posts = await prisma.post.findMany();
-  return res.json(posts);
-});
-
-app.get("/posts/:id", async (req: Request, res: Response) => {
-  const id = Number(req.params.id);
-  try {
-    const post = await prisma.post.findUnique({
-      where: {
-        id,
-      },
-    });
-    return res.json(post);
-  } catch (e) {
-    return res.status(400).json(e);
-  }
-});
-
-app.post("/posts", async (req: Request, res: Response) => {
-  const { title, content, authorId } = req.body;
-  try {
-    const post = await prisma.post.create({
-      data: {
-        title,
-        content,
-        authorId,
-      },
-    });
-    return res.json(post);
-  } catch (e) {
-    return res.status(400).json(e);
-  }
-});
-
-app.patch("/posts/:id", async (req: Request, res: Response) => {
-  const id = Number(req.params.id);
-  const { title, content } = req.body;
-  try {
-    const post = await prisma.post.update({
-      where: {
-        id,
-      },
-      data: {
-        title,
-        content,
-      },
-    });
-    return res.json(post);
-  } catch (e) {
-    return res.status(400).json(e);
-  }
-});
-
-app.delete("/posts/:id", async (req: Request, res: Response) => {
-  const id = Number(req.params.id);
-  try {
-    const post = await prisma.post.delete({
-      where: {
-        id,
-      },
-    });
-    return res.json(post);
-  } catch (e) {
-    return res.status(400).json(e);
-  }
-});
+app.use("/posts", posts);
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
