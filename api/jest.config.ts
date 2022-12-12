@@ -4,6 +4,14 @@
  */
 
 export default {
+  moduleFileExtensions: ["ts", "js"],
+  transform: {
+    "^.+\\.ts$": "@swc/jest",
+  },
+  globals: {
+    tsconfig: "tsconfig.json",
+  },
+  testMatch: ["**/__test__/**/*.spec.ts"],
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
