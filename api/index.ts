@@ -3,8 +3,8 @@ import express from "express";
 const app = express();
 const port = 3000;
 
-const posts = require("./router/posts");
-const users = require("./router/users");
+const posts = require("./routes/posts");
+const users = require("./routes/users");
 
 app.use(express.json());
 app.use("/posts", posts);
