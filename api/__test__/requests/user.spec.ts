@@ -18,4 +18,16 @@ describe("test for user API", () => {
       expect(res.body).toStrictEqual(dummyUsers);
     });
   });
+
+  describe("GET /users/:id", () => {
+    it("returns specified user", async () => {
+      const dummyUser = await UserHelper.create({ id: 999 });
+      const res = await request(app).get("/users/999");
+
+      expect(res.status).toStrictEqual(200);
+      expect(res.body.name).toStrictEqual(dummyUser.name);
+      expect(res.body.email).toStrictEqual(dummyUser.email);
+      expect(res.body).toStrictEqual(dummyUser);
+    });
+  });
 });
