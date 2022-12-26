@@ -12,4 +12,12 @@ export const UserHelper = {
       },
     });
   },
+
+  attributes(args?: Partial<User>): Partial<User> {
+    return {
+      email: faker.internet.email(),
+      name: faker.internet.userName(),
+      ...args,
+    };
+  },
 };
