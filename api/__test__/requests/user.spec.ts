@@ -42,4 +42,21 @@ describe("test for user API", () => {
       });
     });
   });
+
+  describe("PATCH /users/:id", () => {
+    it("changes user information", async () => {
+      await UserHelper.create({
+        id: 9999,
+        name: "dummy",
+        email: "dummy@email.com",
+      });
+      const params = UserHelper.attributes({
+        name: "neko",
+      });
+      const res = await request(app).patch("/users/9999").send(params);
+
+      expect(res.status).toStrictEqual(200);
+      expect(res.body.name).toStrictEqual(params.name);
+    });
+  });
 });
