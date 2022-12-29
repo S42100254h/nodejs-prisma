@@ -27,7 +27,19 @@ describe("test for user API", () => {
       expect(res.status).toStrictEqual(200);
       expect(res.body.name).toStrictEqual(dummyUser.name);
       expect(res.body.email).toStrictEqual(dummyUser.email);
-      expect(res.body).toStrictEqual(dummyUser);
+    });
+  });
+
+  describe("POST /users", () => {
+    describe("send correct user information", () => {
+      it("creates new user", async () => {
+        const params = UserHelper.attributes();
+        const res = await request(app).post("/users").send(params);
+
+        expect(res.status).toStrictEqual(200);
+        expect(res.body.name).toStrictEqual(params.name);
+        expect(res.body.email).toStrictEqual(params.email);
+      });
     });
   });
 });
