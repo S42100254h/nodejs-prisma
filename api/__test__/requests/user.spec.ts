@@ -59,4 +59,17 @@ describe("test for user API", () => {
       expect(res.body.name).toStrictEqual(params.name);
     });
   });
+
+  describe("DELETE /users/:id", () => {
+    it("deletes user account", async () => {
+      const dummyUser = await UserHelper.create({
+        id: 99999,
+      });
+      const res = await request(app).delete("/users/99999");
+
+      expect(res.status).toStrictEqual(200);
+      expect(res.body.name).toStrictEqual(dummyUser.name);
+      expect(res.body.email).toStrictEqual(dummyUser.email);
+    });
+  });
 });
